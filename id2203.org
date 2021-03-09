@@ -15,6 +15,7 @@ Distributed System definition: A set of *nodes*, connected by a *network*, which
 + Messages delivered in the *same order*
 
 Atomic broadcast can be used to provide fault tolerance to solve Replicated State Machines (RSM)
+
 Atomic broadcast can be used to solve Consensus! i.e. Every node broadcasts its proposal:
     1. Decide on the *first* received proposal
     2. Messages received in same order, thus all nodes will decide the same value
@@ -27,7 +28,7 @@ Atomic broadcast can be used to solve Consensus! i.e. Every node broadcasts its 
 + Clocks are not synchronized
 
   *Internet is essentially asynchronous*
-  *Consensus /cannot/* be solved in asynchronous system if node crashes can happen. you can not find out if a process has failed or just slow.
+  *Consensus* /cannot/ be solved in asynchronous system if node crashes can happen. you can not find out if a process has failed or just slow.
 *** Synchronous System
 + Known bound on time to deliver a message (latency)
 + Known bound on time to compute
@@ -53,7 +54,8 @@ Some processes might behave arbitrarily:
 *** Byzantine algorithms that tolerate such faults
 + Only tolerate up to 1/3 Byzantine processes
 + Non-Byzantine algorithms can often tolerate 1/2 nodes in the asynchronous model
-* TODO Lecture 2 -
+* STRT Lecture 2 - Basic Abstrctions
+** Specification
 * TODO Lecture 3 -
 * TODO Lecture 4 -
 * TODO Lecture 5 -
