@@ -1,4 +1,4 @@
-#+TITLE: Id2203
+#+TITLE: ID2203
 #+AUTHOR: Steven Shidi Zhou
 #+DESCRIPTION: Lecture notes on Course ID2203 Advanced Distributed Systems
 * STRT Lecture 1 - introduction to Distributed Systems
@@ -27,7 +27,8 @@ Atomic broadcast can be used to solve Consensus! i.e. Every node broadcasts its 
 + No bound on time to compute
 + Clocks are not synchronized
 
-  *Internet is essentially asynchronous*
+  *Internet is essentially asynchronous*.
+
   *Consensus* /cannot/ be solved in asynchronous system if node crashes can happen. you can not find out if a process has failed or just slow.
 *** Synchronous System
 + Known bound on time to deliver a message (latency)
@@ -55,8 +56,162 @@ Some processes might behave arbitrarily:
 + Only tolerate up to 1/3 Byzantine processes
 + Non-Byzantine algorithms can often tolerate 1/2 nodes in the asynchronous model
 * STRT Lecture 2 - Basic Abstrctions
-** Specification
-* TODO Lecture 3 -
+** Specification of a Service
+*** Correctness
+**** Safety
+Properties that state that nothing bad *ever* happens. (Often involves the word "never", "at most", "cannot"...)
+
+Safety can only be:
+- *satisfied* in infinite time. (you are never safe)
+- *violated* in finite time (when the bad happens)
+
+Somtimes called "partial correctness"
+**** Liveness
+Properties that something good eventually happens. (Often involves the word "eventually" or "must")
+
+Liveness can only be:
+- *satisfied* in finite time. (when the good happens)
+- *violated* in infinite time. (there is always hope)
+
+Liveness is often just "*Termination*"
+*** Models / Assumptions
+**** Process failures
+***** Crash-stop
+Process stops taking steps. (i.e  Not sending messages, nor receiving messages)
+
+Hence, process do not recover
+***** Omissions
+Process omits sending or receiving messages:
+****** Send omission
+Not sending messages the process has to send according to its algorithm.
+****** Receive omission
+Not receiving messages that have been sent to the process
+***** Crash-revocery
+The process might crash (same as above)
+
+It may *recover* after crashing
+
+Has access to *stable storage*
+
+****** Failure is different in crash-recovery model
+A process is *faulty* in an execution if:
+- It crashes and *never* recovers, or
+- It crashes and recovers *infinitely often* (Unstable)
+
+Hence, a *correct process* may crash and recover *As long as it is a finite number of time*
+***** Byzantine failures
+A process may behave arbitrarily:
+- Sending messages not specified by its algorithm
+- Updating its state as not specified by its algorithm
+
+Maybe behave maliciouly, attacking the system
+***** Fault-tolerance hierarchy
+Byzantine tolerance -> Crash-recovery tolerance -> Omission -> Crash-stop
+**** Channel failures
+***** Fair-Loss Links
+Channels that delivers any message send with non-zero probability (No network partitions)
+****** Properties
+- *FL1. Fair-loss*: If m is sent infinitely often by P_i to P_j and neither crash, then m is delivered infinitely often by P_j *(Liveness)*
+- *FL2. Finite duplication*: If a message m is sent a finite number of times by P_i to P_j, then it is delivered at most a finite number of times by P_j. (i.e. a message can be duplicated a finite4 of times, but cannot be duplicated infinitely many times) *(Liveness)*
+- *FL3. No creation*: No message is delivered unless it was sent. *(Safety)*
+***** Stubborn Links
+Channels delivers an message sent infinitely many times.
+****** Properties
+- *SL1. Stubborn delivery*: If a correct process P_i sends a message m to a correct process P_j, then P_j delivers m an infinite number of times *(Liveness)*
+- *SL2. No creation* If a message m is delivered by some process P_j, then m was previsouly sent m some process P_i. *(Safety)*
+****** Correctness
+- *SL1. Stubborn delivery*: If process does not crash, it will send every message infinitely many times. Messages will be delivered infinitely many times. Fair-loss link may only drop a (large) fraction.
+- *SL2. No creation*: Guaranteed by the Fair-loss link
+***** Perfect Links
+Channels that delivers any message sent exactly once.
+****** Properties
+- *PL1. Reliable delivery*: If P_i and P_j are correct, then every message sent by P_i to P_j is eventually delivered by P_j. *(Livenss)*
+- *PL2. No duplication*: Every message is delivered at most once. *(Safety)*
+- *PL3. No creation*: No message is delivered unless it was sent. *(Safety)*
+****** Correctness
+- *PL1. Reliable delivery*: Guaranteed by Stubborn link. In fact that Stubborn link will deliver it infinite number of times
+- *PL2. No duplication*: Guaranteed b our log mechanism
+- *PL3. No creation*: Guaranteed by Stubborn link (which garanteed by its fair-loss link)
+***** FIFO Perfect Links (Reliable Links)
+****** Properties
+- *PL1. Reliable delivery*: If P_i and P_j are correct, then every message sent by P_i to P_j is eventually delivered by P_j. *(Livenss)*
+- *PL2. No duplication*: Every message is delivered at most once. *(Safety)*
+- *PL3. No creation*: No message is delivered unless it was sent. *(Safety)*
+- *FFPL. Ordered delivery*: if m_1 is sent before m_2 by P_i to P_j and m_2 is delivered by P_j then m_1 is delivered by P_j before m_2
+****** TCP vs FIFO
+- TCP provides reliable delivery of packets.
+- TCP reliability is so called "session based"
+
+  In general, FIFO Perfect Links is more strict than TCP
+**** Timing Assumptions
+***** Asynchronus Model and Causality
+****** Asynchronus Systems
+- *No timing assumption* on processes and channels
+  + Processing time varies arbitarily
+  + No bound on transmission time
+  + Clocks of different processes are not synchronized
+- Reasoning in this model is based on which events may cause other events e.g. *(Causality)*
+- *Total order* of event *not observable* locally, no accessto global clocks.
+****** Causal Order (Happen before)
+- If a occurs before b on the same process, then a -> b
+- If a id a send(m) and b deliver(m), then a -> b
+- a -> b is transitive: i.e. If a -> b and b -> c then a -> c
+****** Equivalence of executions
+If two executions F and E have the same collection of events, and their causal order is preserved, F and E are said to be *similar executions*, written F~E
+
+*NOTE*: F and E could have different permutaion of events as long as causality is preserved!
+
+******* Computations:
+- ~ is reflexive: i.e. a~a for any execution.
+- ~ is symmetric. i.e. If a~b then b~a for anyy executions a and b
+- ~ is transitive. i.e. If a~b and b~c, then a~c, for any executions a, b, c
+******* Computation theorem gives 2 important results:
+- There is no algorithm in the asynchronous system model that can observe the *order* of the sequence of events (that can "see" the time-space diagram, or the trace) for all executions
+  + Proof:
+    - Assume such an algorithm exists. Assume p knows the order in the final (repeated) configuration
+    - Take two distinct similar executions of algorithm preserving causality
+    - Computation theorem says their final repeated configurations are the *same*, then the algorithm _cannot_ have observed the actual order of events as *theyy differ*
+- The computation theorem does not hold if the model is extended such that each process can read a local *hardware clock*
+  + Proof:
+    - Similarly, assume a distributed algorithm in which each process reads the local clock each time a local event occurs
+    - The final (repeated) configuration of different causalit preserving executions will have different clock values, which would contradict the compuration theorem
+****** Synchronous Systems
+Model assumes:
+- *Synchronous computation*:
+  + Known upper bound on how long it takes to perform computation
+- *Synchronous communication*:
+  + Known upper bound on message transmission delay
+- *Synchronous physical Clocks*:
+  + Nodes have local physical clock
+  + Known upper bound clock-drift rate and clock skew
+****** Partial Synchrony
+Asynchronous sstem, which *eventually* becomes synchronous. Cannot known when, but in every execution, some bounds eventually will hold.
+
+Your algorithm will have along *enough time* window, where everything behaves nicely (synchrony), so that it can achieve its goal.
+
+Noticed that the time at which a system behaves synchronously is *unknown*:
+- To *prove safet properties* we need to *assume* that the system is asynchronous.
+- To *prove liveness* we use the *partial synchrony* assumption
+***** Logical Clocks
+****** Lamport logical clock
+Lamport clocks guarantee that:
+- If a -> b, then t(a) < t(b)
+- If t(a) >= t(b), then not(a -> b)
+
+The happen-before relation is a partial order.
+
+In contrast logical clocks are total:
+- Information about non-causalit is *lost*
+  + We cannot tell by looking to the timestamps of event a and b whether there is a causal relation between the events, or they are concurrent
+****** Vector clock
+- if v(a)<v(b), then a -> b in addition to
+- if a -> b, then v(a) < v(b)
+
+Cons:
+- payload is huge.
+- When new process join have to reconfigure and update vector
+
+* STRT Lecture 3 - Failure Detectors
 * TODO Lecture 4 -
 * TODO Lecture 5 -
 * TODO Lecture 6 -
