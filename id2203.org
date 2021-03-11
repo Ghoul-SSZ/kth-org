@@ -212,7 +212,177 @@ Cons:
 - When new process join have to reconfigure and update vector
 
 * STRT Lecture 3 - Failure Detectors
-* TODO Lecture 4 -
+** Implementation of Failure detectors
+- periodically exchange heartbeat messages
+- timeout based on worst case message round trip
+- if timeout, then suspect process
+- if received message from suspected node, revise suspicion and increase timeout
+
+** Completeness and Accuracy
+*Completeness requirements*: Requirements regrading actually crashed nodes. (when do they have to be detected?)
+
+*Accuracy requirements*: Requirements regrading actually alive nodes. (when are they allowed to be suspected?)
+
+In asynchronous system:
+- Is it possible to achieve completeness?
+  + es, suspect all processes
+- Is it possible to achieve accuracy?
+  + Yes, refrain from suspecting any process!
+- Is it possible to achieve both?
+  + No!
+
+Failure detectors are feasible *only* in synchronous and partiall synchronous systems.
+*** Strong Completeness
+Every crashed process is *eventually* detected by all correct processes.
+
+There exists a time after which all crashed processes are detected byy all correct processes
+*** Weak Completeness
+Every crashed process is *eventually* detected by some correct [rpcess]
+
+There  exists a time after which all crashed nodes are detected by some correct nodes.
+- Possibly detected by *different* correct nodes
+- e.g. 4 process P_1 - P_4, P_3 and P_4 crash, and P_1 only detect P_3, P_2 only detect P_4, this is fine!
+*** Strong Accuracy
+No correct process is *ever* suspected.
+
+achievable in synchronous systems
+*** Weak Accuracy
+There exists a correct process which is never suspected by any process (well connected node, useful for leader election)
+*** Eventual Strong Accuracy
+After some finite time the Failure Detector provides *strong accuracy*
+*** Eventual Weak Accuracy
+After some finite time the Failure Detector provides *weak accuracy*
+** Classes of Failure Detectors
+4 detectors with *strong completeness*:
+- Synchronous Systems:
+  + Perfect Detector (P) -> Strong Accuracy
+  + Strong Detector (S) -> Weak Accuracy
+- Partially Synchronous Systems:
+  + Eventually Perfect Detector (<>P) -> Eventual Strong Accuracy
+  + Eventually Strong Detector (<>S) -> Eventual Weak Accuracy
+
+4 detectors with *weak completeness*:
+- Synchronous Systems
+  + Detector Q -> Strong Accuracy
+  + Weak Detector (W) -> Weak Accuracy
+- Partially Synchronous Systems:
+  + Eventually Detector Q (<>Q) -> Eventual Strong Accuracy
+  + Eventually Weak Detector (<>W) -> Eventual Weak Accuracy
+*** Perfect Failure Detector - P
+**** Properties of P
+- *PFD1 (strong completeness)*: Eventually every process that crashes is permanently detected by every correct process. *(Liveness)*
+- *PFD2 (strong accuracy)*: If a node p is detected by any node, then p has crashed. *(Safety)*
+**** Correctness of P
+- *PFD1 (strong completeness)*:
+  + A crashed process does not send <heartbeat>
+  + Eventually every process will notice the absence of <heartbeat>
+- *PFD2 (strong accuracy)*:
+  + Assuming local compuration is negligible
+  + Maximum time between 2 heartbeats
+  + If alive, all process will receive <heartbeat> in time. No inaccuracy
+*** Eventually Perfect Failure Detector - <>P
+**** Properties of <>P
+- *PFD1 (strong completeness)*
+- *PFD2 (eventual strong accuracy)*: *Eventually*, no correct process is suspected by any correct process
+**** Correctness of <>P
+- *PFD1 (strong completeness)*: Same as before
+- *PFD2 (eventuall strong accuracy)*:
+  + Each time p is inaccurately suspected by a correct q
+    - Timeout T is increased at q
+    - Eventuallyy system becomes synchronous, and T becomes larger than the unknown bound
+    - q will receive <heartbeat> on time, and never suspect p again
+** Leader Election
+Formally, leader election is a Failure Detector:
+- Always suspects all process except one (leader)
+- Ensures some properties regarding that process
+*** Leader election (LE) which "matches" P
+**** Properties of LE
+- *LE1 (eventual completeness)*: Eventually every correct process trusts some correct process
+- *LE2 (agreement)*: No 2 correct processes trusts different correct processes
+- *LE3 (local accuracy)*: If a process is elected leader by P_i, all previously elected leaders by P_i have crashed
+*** Eventual leader election (omega) which "matches" <>P
+**** Properties of ELE
+- *ELD (eventual completeness)*: *Eventually* every correct node trusts some correct node
+- *ELD2 (eventual agreement)*: *Eventually* no 2 correct nodes trusts different correct node
+
+Can we elect a recovered process?: Not if it keeps crash-recovering infinitely often
+** Reduction
+We cay  X \preceq Y if:
+- X can be solved given a solution of Y
+- Read X is reducible to Y
+- Informally problem X is easier or as hard as Y
+
+a relation \preceq is a preorder on a set A.
+** Combining Abstractions
+*** Fail-stop - Synchronous
+- Crash-stop process model
+- Perfect links + Perfect failure detector (P)
+*** Fail-silent - Asynchronous
+- Crash-stop process model
+- Perfect links
+*** Fail-noisy - Partially synchronous
+- Crash-stop process model
+- Perfect links +  Eventually Perfect failure detector (<>P)
+*** Fail-recovery
+- Crash-recovery process model
+- Stubborn link + ...
+* STRT Lecture 4 - Reliable Broadcast
+** Combining Abstractions
+*** Combining Abstractions
+*** Fail-stop - Synchronous
+- Crash-stop process model
+- Perfect links + Perfect failure detector (P)
+*** Fail-silent - Asynchronous
+- Crash-stop process model
+- Perfect links
+- No access to failure detectors!
+*** Fail-noisy - Partially synchronous
+- Crash-stop process model
+- Perfect links +  Eventually Perfect failure detector (<>P)
+- To guarantee safety properties an algorithm has to assume the failure detector inaccurate
+- Eventual accuracy is only used to guarantee liveness
+*** Fail-recovery
+- Crash-recovery process model
+- Stubborn link or a persistent links (logs)
+- Relies often on a persistent memory to store and retrive crtical info.
+** Quorums
+- Quorum is any set of majority of processes.
+- The algorithms will rely on a majority of processes will not fail
+  + f < N/2 (f is the max number of faulty processes, AKA the *resilience* of the algorithm)
+** Broadcast Abstractions
+*** Reliable broadcast abstractions
+- *Best-effort broadcast*: Guarantees reliabilit only if sender is correct
+- *Reliable broadcast*: Guarantees reliability independent of whether sender is correct
+- *Uniform reliable broadcast*: Also considers behaviour of failed nodes
+- *FIFO reliable broadcast*: Reliable broadcast with FIFO delivery order
+- *Causal reliable broadcast*: Reliable broadcast with causal delivery order
+- *Probabilistic reliable broadcast*:
+  + Guarantees reliability with high robability
+  + Scales to large number of nodes
+- *Total order (atomic) reliable broadcast*: Guarantees reliability and same order of delivery
+*** Best-Effort Broadcast (BEB)
+Use Perfect channel abstraction ->  Upon <beb Broadcast | m> send message m to all processes (for loop)
+**** Properties
+- *BED1. Best-effor-Validity*: If P_i and P_j are correct, then any broadcast by P_i is eventually delivered by P_j
+- *BEB2. No duplication*: No message delivered more than once
+- *BEB3. No creation*: No message delivered unless broadcast
+**** Correctness
+- If sender does not crash, every other correct process receives message by perfect channels *(Validity)*
+- *No creation* & *No duplication* already guaranteed by perfect channels.
+*** Reliable Broadcast (RB)
+Same as BEB, plus if sender crashes: ensure all or none of the correct nodes get msg
+**** Properties
+- *RB1 = BEB1. Validity*: If *correct* P_i broadcasts m, P_i itself eventually delivers m
+- *RB2 = BEB2. No duplication*
+- *RB3 = BEB3. No creation*
+- *RB4. Agreement*: If a *correct node delives* m, then every correct process delivers m
+*** Uniform Reliable Broadcast
+If a failed nodes delivers, everone must deliver...
+**** Properties
+- *URB1 = RB1*
+- *URB3 = RB2*
+- *URB3 = RB3*
+- *URB4. Uniform Agreement*: For any message m, if a process delivers m, then every correct process delivers m
 * TODO Lecture 5 -
 * TODO Lecture 6 -
 * TODO Lecture 7 -
