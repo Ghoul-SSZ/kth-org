@@ -376,14 +376,144 @@ Same as BEB, plus if sender crashes: ensure all or none of the correct nodes get
 - *RB2 = BEB2. No duplication*
 - *RB3 = BEB3. No creation*
 - *RB4. Agreement*: If a *correct node delives* m, then every correct process delivers m
+**** Fail-Stop: Lazy Reliable Broadcast
+Requires perfect failure detector (P) and Beb broadcast
+
+To reliable broadcast m:
+- beb boardcast m
+- When get beb Deliver
+  + save message, and *RB* Deliver message
+- If sender s crash, detect and relay message from s to all
+***** Correctness of Lazy RB
+- *RB1-RB3* satisfied by BEB
+- Need to prove *RB4*: If a *correct node delivers* m, then every correct node delivers m.
+
+Assume correct P_k delivers message bcast by P_i:
+- If P_i is correct, BEB ensures correct delivery
+- If P_i crashes,
+  + P_k detects this. (completeness)
+  + P_k uses BEB to ensure (BEB1) every correct node gets it
+***** Complexity of Lazy RB
+Assume N processes:
+- *Message complexity*:
+  + Best case: O(N) messages
+  + Worst case: O(N^2) messages
+- *Time complexity*:
+  + Best case: 1 time unit
+  + Worst case: 2 time units
+**** Fail-Silent Eager Reliable Broadcast
+uses <>P instead of P. This only affects performance. -> Since we have to assume all processes failed (*worst case senario of Lazy RB*), and we BEB broadcast as soon as you get a message.
 *** Uniform Reliable Broadcast
-If a failed nodes delivers, everone must deliver...
+If a *failed process* delivers a message m, then every correct node delivers m.
 **** Properties
 - *URB1 = RB1*
 - *URB3 = RB2*
 - *URB3 = RB3*
 - *URB4. Uniform Agreement*: For any message m, if a process delivers m, then every correct process delivers m
-* TODO Lecture 5 -
+**** Uniform Eager RB
+- Messages and *pending* until all correct processes get it.
+  + Collect ACKs from processes that got msg
+- Deliver once all correct processes acked
+  + Use perfect FD (P)
+***** Correctness of Uniform RB
+- *No creation* from BEB
+- *No duplication* by using "delivered" set
+- *Lemma*: If a *correct* process P_i bebDelivers m, then P_i evnetually urbDelivers m
+  + Proof:
+    - Correct process P_i bebBroadcasts m as soon as it gets m
+      + By *BEB1* every correct process gets m and bebBroadcasts m
+      + P_i get bebDeliver(m) from every correct process by BEB1
+      + By completeness of P, it will not wait for dead nodes forever
+        - *canDeliver(m) becomes true and P_i delivers m
+****** Validity
+If sender is correct, it will by *validity (BEB1)* bebDeliver m.
+
+By the *lemma*, it will eventually urbDeliver(m)
+****** Uniform agreement
+- Assume some process (possibly failed) URB delivers m
+  + Then canDeliver(m) was true, by *accuracy* of P *every* correct process has BEB delivered m
+- By *lemma* each of the nodes that BEB delivered m will URB deliver m
+**** Fail-Silent Majority-ACK Uniform RB
+Assume a majority of correct nodes. Use same algorithm as uniform eager RB, but wait for a majority of nodes has acknowledged m.
+
+- Agreement
+  + If a process URB delivers, it got ack from majority
+  + In that majorit, one node, p, must be correct
+  + p will ensure all correct processes BEB deliver m
+    - The correct processes (majority) will ack and URB deliver
+- Validity
+  + If correct sender sends m
+    - All correct nodes BEB deliver m
+    - All correct nodes BEB broadcast
+    - Sender receives a majorit of acks
+    - Sender URB delivers m
+** Resilience
+The maximum number of fault processes an algorithm can handle.
+- *Fail-Silent algorithm* has resilience less than N/2
+- *Fail-Stop algorithm* has resilience N-1
+** Casual Broadcast
+*** Causalit of Messages
+- *C1 (FIFO order)*: Some process P_i broadcasts m_1 before broadcasting m_2
+- *C2 (Network order)*: Some process P_i delivers m_1 and later broadcasts m_2
+- *C3 (Transitivity)*: There is a message m such that m_1 -> m and m -> m_2
+*** Reliable Causal Broadcast
+**** Properties
+- *RB1-RB4* from regular reliable broadcast
+- *CB*: If node P_i delivers m, then P_i must deliver ever message causally preceding (->) m before m
+*** Uniform Reliable Causal Broadcast
+**** Properties
+- *URB1-URB4* from uniform reliable broadcast
+- *CB*: If node P_i delivers m, then P_i must deliver ever message causally preceding (->) m before m
+*** Fail-Silent Waiting Causal Broadcast
+Represent past history bu *vector clock (VC)*, Piggback VC and RB broadcast m
+- Upon RB delivery of m with attached VC_m
+- compare VC_m with local VC
+  + Only deliver m once VC_m <= VC
+  + Do not deliver if VC_m > VC or VC_m != VC
+**** Agreement (Correctness)
+- Assume m is co-delivered at correct pi
+- pi co-delivered all message causall before m
+- Every correct process rb-delivered m and all causall preceding messages (agreement of RB)
+- Hence every correct process co-deliver m
+*** Other possible orderings
+**** Single-source FIFO order
+Msgs from same node delivered in order sent
+***** Caveat
+This formulation does not require delivery of both messages
+**** Total Order
+Everone delivers everything in exact same order
+***** Caveat
+This formulation does not require deliver of both messages.
+
+Everyone delivers same order, mabe not send order!
+* STRT Lecture 5 - Distributed Shared Memory
+** (1, N) Regular register
+Validity:
+- Read returns *last value written* if
+  + Not concurrent with another write, and
+  + Not concurrent with a failed write
+- Otherwise ma return last or concurrent value
+*** Fail-Stop Read one Write all (1, N)
+Fail-stop model, use perfect FD (P)
+- to write(v):
+  + Update local value to v
+  + Broadcast v to all
+  + Wait for ACK from all correct processes
+  + Return
+- to read
+  + Return local value
+**** Correctness
+Assume we use BEB broadcast, Perfect links and P
+
+*validity*:
+- No concurrent write with the read operations
+  + Assume p invokes a read, and v last written value
+  + At time of read by p, the write is complete (accurac of P) and p has v stored locally
+- Read is concurrent with write of value v, v' the value prior to v
+  + Each process store v' before write(v) is invoked
+  + At a read is invoked each process either stores v or v'
+  + As the writes is concurrent, either value is correct to read
+*** Fail-Silent Majority Voting Algorithm
 * TODO Lecture 6 -
 * TODO Lecture 7 -
 * TODO Lecture 8 -
