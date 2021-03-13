@@ -607,7 +607,7 @@ In Fail-silent model implement read/write multiple register shared memory.
 - *Linerizability in logical time allows compositionality*
 - LT-algorithm satisfies SC, but also satisfies a *bit stronger consistenc condition* that is *compositionality*
 
-[[]]
+[[./id2203-img/SM.PNG]]
 * TODO Lecture 7 -
 * TODO Lecture 8 -
 * TODO Lecture 9 -
