@@ -608,7 +608,80 @@ In Fail-silent model implement read/write multiple register shared memory.
 - LT-algorithm satisfies SC, but also satisfies a *bit stronger consistenc condition* that is *compositionality*
 
 [[./id2203-img/SM.PNG]]
-* TODO Lecture 7 -
+* STRT Lecture 7 - Single Value Uniform Consensus - Paxos
+** Single value consensus
+- *C1.Validity*: An value decided is a value proposed
+- *C2.Agreement*: No two correct nodes decide differently
+- *C3.Termination*: Every correct node eventually decides
+- *C4.Integrity*: A node decides at most once
+** Single value uniform consensus
+- *Validity*: Only proposed values may be decided
+- *Uniform Agreement*: No two process decide different values
+- *Integrity*: Each processes can decide a value at most once
+- *Termination*: Ever process eventually decides a value
+
+Solvable in Fail-Stop model (decide on last round) with strong FD
+
+*Not Solvable* in Fail-Silent model (asynchronous system model)
+** Paxos
+*** Assumptions
+- Partially synchronous system
+- Fail-noisy model
+- Message duplication, loss, re-ordering
+*** High Level View of Paxos
+- Elect a *single proposer* using Omega
+  + Proposer imposes its proposal to everyone
+  + Everyone decides
+- Problem with Omega
+  + Several processes might initiall be proposers (contention)
+- Solution is *Abosrtable Consensus*
+  + Processes attempt to impose their proposals
+  + Might *abort* if there is contention *(safety)* (multiple proposers)
+  + Omega ensures eventuall 1 proposer succeeds *(liveness)*
+*** The Paxos Algorithm
+**** Terminology
+- *Proposers*: Will attempt imposing their *proposal* to set of acceptors
+- *Acceptors*: May *accept* values issued by proposers. Acceptors can not talk to each other
+- *Learners*: Will *decide* depending on acceptors acceptances
+
+Each process plays all 3 roles in classic setting
+**** Abortbale Consensus
+- Abortable Consensus in a nutshell
+  + *P1.*: An acceptor *accepts* first proposal it receives
+  + *P2.*: If v is *chosen*, every higher proposal *chosen* has value v
+  + *P2a.*: If v is *chosen*, every higher proposal *accepted* has value v
+  + *P2b.*: If v is *chosen*, every higher proposal *issued* has value v
+  + *P2c.*: If any proposal(n, v) is issued, there is a majority set S of acceptors such that either
+    - (a). no one in S has *accepted* an proposal numbered less than n
+    - (b). v is the value of the highest proposal among all proposals less than n *accepted* b acceptors in S
+
+- Handwaving:
+  + P1 ensures *obstruction-free progress* and *validity*
+  + P2 ensures *agreement*
+  + Integrity is trivial to implement
+    - Remember if chosen before, at most choose once.
+
+[[./id2203-img/PC1.PNG]]
+
+*NOTE*: You do not propose if you are not the leader. need both Omega + Abortable Consensus to reach Consensus
+***** Optimization
+[[./id2203-img/PC2.PNG]]
+
+- Paxos require 2 round trips (with no contention)
+  + Prepare(n): prepare phase (read phase)
+  + Accept(n, v): accept phase (write phase)
+- P2. If v is *chosen*, every higher proposal *chosen* has value v
+  + *Final Optimization*: Proposer skips the accept phase if a majorit of acceptors return the same value v
+***** State to Remember
+[[./id2203-img/PC3.PNG]]
+Can run in Fail-recovery model
+***** Performance
+- Paxos requires 4 message delays (2 RTTs)
+  + Prepare(n) needs 2 delays (Broadcast & Get Majority)
+  + Accept(n, v) needs 2 delays (Broadcast & Get Majority)
+- In man cases onl accept phase is run
+  + Paxos only needs *2 delays* to terminate
+  + (Believed to be) optimal
 * TODO Lecture 8 -
 * TODO Lecture 9 -
 * TODO Lecture 10 -
