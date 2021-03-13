@@ -513,8 +513,101 @@ Assume we use BEB broadcast, Perfect links and P
   + Each process store v' before write(v) is invoked
   + At a read is invoked each process either stores v or v'
   + As the writes is concurrent, either value is correct to read
+**** Performance and Resilience
+- Time complexity (write): 2 communication steps (broadcast and ACK)
+- Message complexity: O(N) messages
+- Resilience: fault processes f = N - 1
 *** Fail-Silent Majority Voting Algorithm
-* TODO Lecture 6 -
+*Quorum principle*:  Always write and read from a majority of processes. At least one correct process knows most recent value
+- *PRO*: Tolerate up to N/2 -1 crashes
+- *CON*: Have to read/write N/2 +1 values
+**** Correctness
+- No concurrent write with the read operations
+  + Assume q invokes a read, and (ts, v) last written value by p. ts is the highest time stamp
+  + At time of read-inv b q, a majority has (ts, v)
+  + q gets at least one response with (ts, v) and returns v
+- Read is concurrent with a write with value (ts, v)
+  + (ts-1, v') the value prior to (ts, v)
+  + Majority of process store (ts-1, v') before write(v) is invoked
+  + The query phase of the read returns either (ts-1, v') or (ts, v)
+**** Performance and Resilience
+- Time complexit (both write and read):  2 communication steps (one round trip)
+- Message complexity: O(N) messages
+- Resilience: faulty processes f < N/2
+** Atomic/Linearizability vs Sequential Consistency
+Linearizability > Sequential Consistency & Regular.  But Regular != Sequential
+*** Sequential consistency
+Definition: The result of any execution is the *same* as if the operations of all the process were executed in *some sequential order*, and the operations of each *individual process* in this sequence are in *the order specified by its program*.
+
+Only allow executions whose results appear as if there is a single system image and "local time" is obeyed.
+*** Linearizability / Atomic Consistency
+Definition: The result of any execution is the *same* as if the operations of all the processes were executed in *some sequential order*, and the operations in this sequence are in the *global time order of operations* (Occurs between invocation and response)
+
+Only allow executions whose results appear as if there is a single system image and "global time" is obeyed
+* STRT Lecture 6 - Atomic Registers + Sequentiall Consistent Algorithm
+** Liveness: progress
+*** Wait-free
+Every corret node should "make progress"
+- No deadlocks
+- No live-locks
+- No starvation
+*** Lock-free/non-blocking
+At least one correct node should "make progress"
+- No deadlocks
+- No live-locks
+- Mabe starvation
+*** Obstruction free/ solo-termination
+If a single node executes without interference (contention) it makes progress
+- No deadlocks
+- Mabe live-locks
+- Mabe starvation
+** Atomic Register
+*** Termination (Wait-Freedom)
+If node is correc, each read and write op eventuall completes
+*** Linearization Points
+- *Read ops* appear as if immediately happened at all nodes at
+  + time between invocation and response
+- *Write ops* appear as if immediately happened at all nodes at
+  + time between invocation and response
+- *Failed ops* appear as
+  + completed at every node, XOR
+  + never occurred at any node
+*** (1, N) Atomic Algorithm: Read-impose write majority
+Same as (1, N) regular register, but to read:
+- Broadcast read request to all
+  + Receiver respond with local value v and ts (quer phase)
+- Wait and save values from majority of nodes
+- Perform an update phase with highest (ts, v)
+
+Optimization:
+- If all responses in the query phase have the same ts, do not perform the update phase, just return
+- This is because a majorit has the latest value written.
+
+**** Validity
+- Read returns last value written if Not concurrent with another write. Not concurrent with a failed operation
+- Otherwise ma return last or concurrent "value"
+
+A read ops r1 makes an update with r1, so an succeeding read must at least see r1
+*** (N, N) Atomic Algorithm: Read-impose write-consult-majority
+- A write to complete requires 2 round trips of messages
+  + One for getting the latest timestamp (query phase)
+  + One for broadcast - ACK (Update phase)
+- A read to complete requires 2 round trip max:
+  + One for read (query phase)
+  + One for impose if necessar (update phase)
+*** (N, N) algorithm for Sequentially consistent registers:  Logical Time (LT) algorithm
+In Fail-silent model implement read/write multiple register shared memory.
+- Multiple writers and multiple readers
+- Sequentially consistent model
+- Writes in 1 RTT and reads in 2 RTTs
+- Tolerates f < N/2 faulty processes failing b crashing
+**** compositionality of LT algorithm
+- LT-algorithm linerizes read/writes in logical time instead of real time.
+- Executions (real time traces) are sequentiall consistent instead of linerizable
+- *Linerizability in logical time allows compositionality*
+- LT-algorithm satisfies SC, but also satisfies a *bit stronger consistenc condition* that is *compositionality*
+
+[[]]
 * TODO Lecture 7 -
 * TODO Lecture 8 -
 * TODO Lecture 9 -
