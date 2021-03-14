@@ -682,9 +682,134 @@ Can run in Fail-recovery model
 - In man cases onl accept phase is run
   + Paxos only needs *2 delays* to terminate
   + (Believed to be) optimal
-* TODO Lecture 8 -
-* TODO Lecture 9 -
-* TODO Lecture 10 -
+* STRT Lecture 8 - Replicated State Machines & Sequence Consensus
+**  State Machine
+- Executes a sequence of commands
+- Transform its state and may produce some output
+- Commands are deterministric
+  + Outputs of the state machine are solely determined by the initial state and by the sequnece of commands that it has executed
+** RSM
+- Replicated log ensures state machines execute same commands in same order
+- Consensus module guarantees agreement on command sequence in the replicated log
+- System makes progress as long as any majority of servers are up
+** Sequence Consensus
+In single value paxos, a process can decide at most one value. so we can extend it with more information since we do not want to change what has been decided before.
+- This is allowed by Sequence Consensus
+  + Can decide again if old decided sequence is a prefix of the new one
+*** Sequence consensus properties
+- *Validity*: If process p decides v then v is a *sequence* of proposed commands (*without duplicates*)
+- *Uniform Agreement*: If process p decides u and process q decides v, then one is a prefix of the other
+- *Integrity*: If process p decides u and later decides v then *u is a strict prefix of v*
+- *Termination*: If command C is proposed by a correct process then eventually every correct process decides a sequence containing C. (Liveness)
+** Sequence Paxos
+Same as vanilla paxos, we are only making 2 changes:
+- After adopting a value (seq) with highest proposal number, the proposer is allowed to extendtje sequence with (nonduplicate) new command(s)
+- Learner that receives <Decide, v> will decide v if v is longer sequence than previously decided sequence.
+*** Correctness & Efficiency
+- Correctness in modeled after the single value paxos correctness prood
+- Efficiency?
+  + Every proposal takes 2 round trips
+  + Proposals are not pipelined
+  + Sequences are send back and forth
+  + Decide carries sequences
+
+*A dequence v is chosen at round n*: If there exists an quorum Q of acceptors at round n such that v is prefix Va[p,n] for every acceptor p in Q
+
+*A sequence v is chosen*: If v is chosen at n, for some round n
+
+NOTE: In prepare phase the acceptor send back the latest chosen sequence
+* STRT Lecture 9 - Leader-Based Sequence Paxos
+** Ballot Leader Election
+- BLE satisfies completness and eventually accuracy
+- and also monotonically unique ballots
+*** Propoerties
+- *BLE1. completeness*: Eventually every corrrect process elects some correct process if a majority is correct
+- *BLE2. eventual agreement*: Eventually no two correct processes elect different correct processes
+- *BLE3. monotonic unique ballots*: If a process L with ballot n is elected as leader by P_1, all previously elected leaders by P_i have ballot numbers less than n, and (L, n) is a unique number.
+
+Desirable properties:
+- We will allow a process p to "inaccurately" leave a correct leader as long as the new leader has a higher ballot number
+- We will also require that a process is elected as a leader only if a majority of processes are correct and alive. This fits sequence paxos
+*** Assumptions
+- We assume initially a fail-noisy model
+  + Processes fail by crashing
+  + Initial arbitrary network delays but eventually stabilizes (partially synchronous system)
+  + Perfect point-to-point links
+- However the algorithms works for a weaker model where the network may drop messages and processes crash and recover
+*** Basic idea
+- Ballots are unique
+  + Each process p has its own ballot (n, pid)
+  + A ballot is the rank of a process
+- Max ballot is available at each correct process
+  + Each correct process periodically gossips its ballot to all processes
+- Processes are ranked
+  + Eventually each correct process will elect the process with the highest rank (max ballot) given good network conditions (eventual agreement)
+
+- Majority requirment
+  + Each correct process will trust a leader only if the leader's max ballot is among the collected ballots from a majority of processes
+- Monotonically increasing ballots
+  + Every process p that do not receive the leader's ballot (n, pid) among collected ballots consider the leader has crashes
+  + p increases his own ballot (n+1, pid)
+BLE3 is satisfied and also BLE1 assuming eventual synchrony
+*** Conclusion on BLE
+[[./id2203-img/PC4.PNG]]
+** Prepare once and pipeline accept
+for more info, check [[Lecture slides][./id2203-img/lecture11.pdf]]
+
+Also [[paxos-lecture-notes][arxiv.org/pdf/2008.13456.pdf]] is useful
+*** Current sequence Paxos is inefficient
+- With multiple concurrent proposers, conflicts and restarts are likely (higher load -> more conflicts)
+- 2 rounds of messages for each value chosen (Prepare, Accept)
+*** Solution
+- Pick a Leader(L, n) where n is a unique higher round number (leader election algorithm)
+- The leader acts as solo proposer for round n
+- After first Prepare (if not aborted) only perform accepts until aborted by another Leader(n') where n' > n
+*** Benefit
+- Proposer does prepare(n) before first accept(n,v)
+- After that only one round trip tp decide on an extension of sequence v, as long as round is not aborted
+- (new leader with higher number)
+- Allows multiple outstanding accept requests (pipelining)
+  + Lower propose-to-decide latency for multiple proposals
+* STRT Lecture 10 - Raft for consistent replicated log
+** Fail-Recovery in Sequence Paxos
+- In the fail recovery model a process is correct as long as it fails (by crashing) and recovers finite number of times
+- By crashing and restarting a process p loses any arbitrary suffixes of most recent messages in each FIFO link
+- Once a process restart: it joins the leader-election algorithm in a *recover* state
+*** Fail Recovery persistent variables
+- The algorithm needs to store the following variables in a persistent store for each process
+  + *n_prom*: Promise not to accept in lower rounds
+  + *n_a*: Round number in which last command is accepted
+  + *v_a*: Accepted sequence
+  + *l_d*: Length of decided sequence
+- A recovered process resets its ballot_max to n_prom in BLE
+- The leader election guarantees that a leader with high ballot is elected if the leader crashed and recovered
+** Raft Consensus Algorithm
+*** Terminology
+- Sequence Paxos = Raft
+- v_a the accepted sequence = The log
+- The decided sequence = The committed prefix of Log
+- Round/ballot number = Term
+- Process = Server
+- n_prom, n_L = Highest Term
+- Element in a sequence = Entry
+
+Note: as long as our ballot is higher, we could win LE even though our seq is low in Sequence Paxo, but that is not the case in Raft
+*** Summary
+- Raft as Sequence Paxos have the same basic paxos idea
+  + The longest chosen sequence is the decided (committed) sequence
+  + Leader must have a higher round (term) number
+- Raft differs from Sequence Paxos on
+  + Leader election algorithm (has to be BLE in Raft)
+  + Incorporating the prepare phase as part of electing a leader
+  + Log (Accepted Sequence) reconciliation between leaders and followers
+** Reconfiguration
+ A process have replicas in multiple configurations, but can *only be running in one* configuration at any time.
+
+ See lecture slides for more detail info
+*** Summary
+- Reconfiguring a replicated state machine is relatively straight forward.
+- Round numbers are extended so that rounds in an earlier configuration are order befroe rounds in a later configuration
+- At most one of the replicas that a process implements maybe running at any time
+- The hand-over procedure is important in order to get availability and efficiency
 * TODO Lecture 11 -
 * TODO Lecture 12 -
-*
