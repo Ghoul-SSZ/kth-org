@@ -754,9 +754,9 @@ BLE3 is satisfied and also BLE1 assuming eventual synchrony
 *** Conclusion on BLE
 [[./id2203-img/PC4.PNG]]
 ** Prepare once and pipeline accept
-for more info, check [[Lecture slides][./id2203-img/lecture11.pdf]]
+for more info, check [[./id2203-img/lecture11.pdf][Lecture slides]]
 
-Also [[paxos-lecture-notes][arxiv.org/pdf/2008.13456.pdf]] is useful
+Also [[arxiv.org/pdf/2008.13456.pdf][paxos-lecture-notes]] is useful
 *** Current sequence Paxos is inefficient
 - With multiple concurrent proposers, conflicts and restarts are likely (higher load -> more conflicts)
 - 2 rounds of messages for each value chosen (Prepare, Accept)
