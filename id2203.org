@@ -811,5 +811,34 @@ Note: as long as our ballot is higher, we could win LE even though our seq is lo
 - Round numbers are extended so that rounds in an earlier configuration are order befroe rounds in a later configuration
 - At most one of the replicas that a process implements maybe running at any time
 - The hand-over procedure is important in order to get availability and efficiency
-* TODO Lecture 11 -
-* TODO Lecture 12 -
+* STRT Lecture 11 - Time-leased leader election algorithm
+Will not work in partially synchronous system, need stronger model
+** Time based leader lease
+- Can be integrated with Paxos messages:
+  + *As before* acceptor q join round n by sending a Promise in response tona Prepare(n), and promises to not accept proposals in lower rounds
+  + *In addition*, we require that if q joins round n at time t then q promises not to join a higher round until after time t + 10s
+  + If proposer p gets promises from a majority then p knows that no other proposer can get a majority of promises during next 10 seconds
+*** Clock Drift
+Clock drift is the accumulated effect of a clock rate that differs from real time. ideally, dC/dt =1
+**** clock drift at proposer
+Without compensation,
+- Clock runs faster than real time: Safety *cannot be violated* as proposer believes that its lease expired sonner than it acrually did
+- Clock runs slower than real time: Proposer believes it holds lease even after lease has expired, and proposer may respond to read, and *violate safety*
+
+Compensate method:
+- dC = dt * (1 - \p) <= whatever seconds * (1 - \p)
+**** clock drift at acceptor
+without compensation:
+- Clock runs faster than real time: acceptor believes its promise expired too soon, and may give new lease early, *violating safety*
+- Clock runs slower than real time: safety cannot be violated if acceptor waits longer than necessary to give new promise
+
+Compensate method:
+- dC = dt * (1+p) >= whatever seconds(e.g. 10) * (1+p)
+* STRT Lecture 12 - Shared Memory using Clocks (Interval Clock)
+** Synchronized Clocks
+** Interval Clocks
+- An interval clock (IC) at process p_i read at time t returns a pait C_i(t) = (lo, hi)
+- The interval values of a set of clocks read at the same time t are guaranteed to overlap in the correct time
+- C_i(t1).lo < C_j(t2).hi
+- In write operation, wait until ts(o).t < C_i.lo
+* TODO Lecture 13 - Consistent Snapshots
