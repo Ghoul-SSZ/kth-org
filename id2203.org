@@ -841,4 +841,5 @@ Compensate method:
 - The interval values of a set of clocks read at the same time t are guaranteed to overlap in the correct time
 - C_i(t1).lo < C_j(t2).hi
 - In write operation, wait until ts(o).t < C_i.lo
-* TODO Lecture 13 - Consistent Snapshots
+* DONE Lecture 13 - Consistent Snapshots
+See lecture slides
