@@ -1,7 +1,7 @@
 #+TITLE: ID2207
 #+AUTHOR: Steven Shidi Zhou
 #+DESCRIPTION: Lecture notes on Course ID2207 Modern Methods in Software Development
-* TODO Lecture 1 - Software Life Cycle
+* DONE Lecture 1 - Software Life Cycle
 ** Software nature
 + intangible. It is difficult to understand development efforts
 + untrained people can hack something together
@@ -129,16 +129,100 @@ Repeats over a series of cycles. Each cycle consist of four phases which are sub
 + Customer collaboration over contract negotiation
 + Responding to change over following a plan
 
-* TODO Lecture 2 -
+* TODO Lecture 2 - UML & OOP
+functional requirements
+nonfunctional requirements
 * TODO Lecture 3 -
 * TODO Lecture 4 -
 * TODO Lecture 5 -
 * TODO Lecture 6 -
 * TODO Lecture 7 -
 * TODO Lecture 8 -
-* TODO Lecture 9 -
-* TODO Lecture 10 -
-
+* DONE Lecture 9 - Agile
+** Limitation of waterfall and spiral models
+Neither of these models deals well with frequent changes:
++ *Waterfall Model* assume that once you are done with a phase, all issues covered in that phase are closed and can not be reopened
++ *Spiral Model* can deal with changes between phases, but once inside a phase, no change is allowed.
+** Practices of XP
++ Short releases (Short cycles)
++ Pair programming
++ Test-Driven development (testing)
++ Collective Ownership
++ Continuous integration
++ The planning game
++ Simple design
++ Refactoring
++ Metaphor
++ sustainable pace, codeing standards and on site Customer
+** Some definitoins
++ *Spike*: Quick throw away explorations into the nature of a potential solution.
++ *Metaohor*: a story that everyone can tell about how the systme works. It may change over time as you learn more about the system, and as you get inspired in your understanding of it.
+** Limitations of XP
++ XP only works well with small teams , 6 or 7 is probably a reasonable limit, althrough it may work with up to 12.
++ XP only works with the very best software engineers. A typical team will mostly hold PHD in computing or have equivalent industrial experience.
++ XP is extermely demanding and requires very effective teamwork. Not every engineer can cope with the approach.
+** Summary
++ No explicit analysis /design models
+    + Agile programming goal: Minimize the amount of documentation produced beside the code.
+    + The assumption is that smaller deliverables reduce the amount of work and duplication of issues.
++ Models are only communicated among participants
+    + The client is seen as a *Walking specification*
++ Source Code is the only external model
+    + The system design is made visible in the source code by using explicit names and by decomposing methods into many simpler ones. (each with a descriptive name)
+    + Refactoring is used to improve the source code
+    + Coding Standards are used to help developers communicate using only the source code
+* DONE Lecture 10 - Testing
+** What is tesitng? 
++ Testing is the process of analysing a systme or components to detect the differences between specified (required) and observed (existing) bahavior.
++ Systematic way to find faults in a planned way in the implemneted software.
++ Done best by independent testers
+** Overview
++ *Reliability*: The measure of success with which the observed behavior of a system confirms to some specification of its behavior.
++ *Fault(Bug)*: The mechanical or algorithmic cause of an error. (A design or coding mistake that may cause abnormal component behavior)
++ *Error*: Manifestation of the fault during the execution of the system. The system is in a state such that further processing by the system can lead to a failure
++ *Failure*: Any deviation of the observed behavior from the specified behavior.
++ *Test case*: A set of inputs and expected results that exercises a component with the purpose of causing failures and detecting faults.
++ *Test stub*: A partial implementation of components on which the tested component depends
++ *Test driver*: A partial implementation of a component that depends on the tested component
+** Unit testing
+*** Unit testing elements.
++ Static analysis:
+    + Hand execution: reading the source code
+    + Automated Tool checking for:
+        + Syntactic and semantic errors
+        + Deåartire from coding standards
++ Dynamic Analysis
+    + Black box testing (testing the input/output behaviour)  e.g. assert equal, or within a range
+    + White box testing (Test the internal logic of the subsystem or object)
+*** White box testing
++ Focus: Thoroughness (Coverage). Every statement in the component is executed at least once.
++ Statement Testing (Algebraic Testing):  Test single statements 
++ Branch Testing  (Conditional Testing): Make sure that each possible outcome from a condition is tested at least once
+** System Testing
+**** Functional testing
++ Finds differences between the functional requirements and the system
++ BlackBox technique
++ Test cases are derived from use case model
++ Selects tests that are relevant to the user and have high probability of a failure
+**** Performance testing
++ Stress testing
++ Volume testing
++ Security testing
++ Timing testing
++ Recovery tests
+**** Acceptance testing
++ Benchmark test
++ Competitor testing
++ Shadow testing
+**** Pilot testing (field test)
++ The system is installed and usedby aselected set of users
++ Pilot tests are usefulwhen a system isbuilt without a specific set of requirements or without a specific customer in mind
++ An alpha test is a pilot test with users exercising the system in the development environment
++ In a beta test, the acceptance test is performed by a limited number of end usersin the targetenvironment
+**** Installation testing
++ Testing reconfiguration
++ Often repeats test cases from previous phases
++ Some requirements cannot be executedin thedevelopment environment because they require target-specific resources
 * DONE Quiz 1
 ** Question 1
 *Software Engineering*: The application of Engineering principle to deliver and maintain high quality & reliable software on time and within budget
@@ -167,6 +251,53 @@ Repeats over a series of cycles. Each cycle consist of four phases which are sub
 *Aggregation Relationship*: A special case pf association Relationship denoting a consists of hierarchy. A special form of this Relationship is the composition Relationship where components cannot exists without the aggregate.
 *Qualifiers*: They can be used to redice the multiplicity of an association. 
 
-* TODO Quiz 2 - 
-* TODO Quiz 3 - 
-* TODO Quiz 4 - 
+* DONE Quiz 2
+** Question 2
+*Robustness*: The degree to which a system can function in a correct way, even with invalid inputs or stressful environment conditions.
+*Reliability*: The ability of a system to perform its required functions under stated conditions for a specified period of time. For Examples, the ability to detect specified faults or to withstand specidied security attacks.
+*Usability*: The ease with which the user can learn how to operate, prepare inputs for, and interpret outputs of a system.
+*Supportability*: Ease of changes to the system after deployment
+*Performance*: Quantifiable attributes of the system such as response time, througput, availability and accuracy.
+** Question 4
+*Consistency*: There are no contradictions between requirements
+*Unambiguity*: There is only one way to interpret certain requirement
+*Verifiability*: Repeatable test can be executed to demonstrate that the system fulfills the requirements Specification
+*Realism*: The system can be implemented within the defined constraints
+** Question 6
+*Prototyping*: It is widely used when projects are complex and/or innovative
+*BrainStorming*: An activity where people propose ideas and solutions to a probelm, putting aside all that can obstacle the consensus.
+*Joint Application Design*: A BrainStorming like technique where all stakeholders meet, discuss and come to mutually acceptable solution.
+*Rapid Application Development*: a technique suitable for fast software development, but usually limited to a small project.
+*Questionnaire*: Method for requirements elicitation that does not require the physical presense of the requirements analyst.
+*Observation*: A method used when the user cannot convey sufficient information when being interviewed. It should be carried out for a prolonged time.
+
+* DONE Quiz 3 
+** Question 1
+*Entity Object*: Objects that present persistent information tracked by the system. To identify them from use cases, we usually search for recurring nouns, data sources, real-world activities that we need to track
+*Boundary Object*: Objects that represent the system interface and the interactions between the system and the users. To identify them, we usually identify the forms that users use to interact with the system, along with other forms of interaction, such as notices or messages from the system.
+*Control Object*: Objects that describe the order in which interactions between the user and the system occur.
+** Question 3
+*Falsification principle*: Demonstrating that relevant details of the system are not presented or presented incorrectly.
+*Syntactic Approach*: One of the class identification approaches in which a noun-verb analysis is used to identify components of the object model.
+*Organization Class*: In common class pattern approach, this type of classes represent any kind of purposeful grouping or collection of things
+*CRC*: An approach that involves brainstorming sessions, where the team members exchange cards on which possible classes are identified, with their responsibilities and collaborators
+*Fork Diagram*: A type of sequence diagrams in which the dynamic behavior is centralized in a single object (the control object) that knows all the other objects and uses them for direct commands
+*Stair Diagram*: A type of sequence diagram in which the dynamic behavior is distributed. Each object delegates some responsibility to other objects
+
+* DONE Quiz 4
+** Question 1 - System Design
+*Design goals*: The qualities of the system that the developer should optimize. The are derived from the non-functional requirements.
+*Software architecture*: The subsystem decomposition in terms of subsystem responsibilities, dependencies among subsystems, subsystem mapping to hardware, and major policy decisions such as control flow, access control, and data storage.
+*Boundary use cases*: Description of the system configuration, startup, shutdown, and exception handling issues.
+*Services*: A set of related operations that share a common purpose. The are used to manage the interaction between subsystems.
+*Coupling*: It is used to measure the dependencies between subsystems. In ideals subsystem decomposition, it should be minimized.
+*Cohesion*: It measures the dependencies among the classes within a subsystem. In ideal subsystem decomposition, it should be maximized 
+*Layering*: A technique that allows the system to be organized as a hierarchy of subsystems, each providing higher level services to the subsystem above it using lower-level services from the systems below it.
+*Partitioning*: A technique that organizes the subsystem as peers that mutually provide different services to each other
+** Question 2 - Architectural Styles
+*Repository*: In this architectural style, subsystems access and modify a single data structure. Subsystems are independent and interact only through this central component. Usually used for the database management systems.
+*MVC*: In this architectural style, subsystem are classified into 3 different types: one that maintain the demain knowledge, another one related to the user interface and the last one manages the sequence of interactions with the user.
+*Client-Server*: In this architectural style, one subsystem provides services to instances for the other subsystem which are responsible for interacting with the user.
+*Peer-to-Peer*: Ageneralization of the client/server architectural style which subsystem can act both as a server and client in the sense that each subsystem can request and provide services.
+*Pipe and filter*: A style in which subsystems process data received from a set of inputs and send results to other subsystems via a set of outputs. They are suitable for systems that apply transformations to streams of data without intervention by users.
+
