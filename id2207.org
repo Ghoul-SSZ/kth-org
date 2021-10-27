@@ -302,9 +302,9 @@ Neither of these models deals well with frequent changes:
 + *Pipe and filter*: A style in which subsystems process data received from a set of inputs and send results to other subsystems via a set of outputs. They are suitable for systems that apply transformations to streams of data without intervention by users.
 
 * Flash cards
-+ *"What is UML?"*:	"A modeling language that is intended to provide a standard way to visualize the design of a system"
-+ *"Describe the functional model"*:	"A model that describes the functionality of the system from the user's point of view"
-+ *"How is the functional model in system development represented in UML?"*:	"With use case diagrams"
++ *What is UML?*:	"A modeling language that is intended to provide a standard way to visualize the design of a system"
++ *Describe the functional model*:	"A model that describes the functionality of the system from the user's point of view"
++ *How is the functional model in system development represented in UML?*:	"With use case diagrams"
 + *"Describe the object model"*:	"A model that describes the structure of the system in terms of objects, attributes, associations and operations"
 + *"How is the object model represented in UML?"*:  "With class diagrams"
 + *"Describe the dynamic model"*:	"A model that describes the internal behavior of the system"
