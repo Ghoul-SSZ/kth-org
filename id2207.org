@@ -286,18 +286,18 @@ Neither of these models deals well with frequent changes:
 
 * DONE Quiz 4
 ** Question 1 - System Design
-+*Design goals*: The qualities of the system that the developer should optimize. The are derived from the non-functional requirements.
-+*Software architecture*: The subsystem decomposition in terms of subsystem responsibilities, dependencies among subsystems, subsystem mapping to hardware, and major policy +decisions such as control flow, access control, and data storage.
-+*Boundary use cases*: Description of the system configuration, startup, shutdown, and exception handling issues.
-+*Services*: A set of related operations that share a common purpose. The are used to manage the interaction between subsystems.
-+*Coupling*: It is used to measure the dependencies between subsystems. In ideals subsystem decomposition, it should be minimized.
-+*Cohesion*: It measures the dependencies among the classes within a subsystem. In ideal subsystem decomposition, it should be maximized 
-+*Layering*: A technique that allows the system to be organized as a hierarchy of subsystems, each providing higher level services to the subsystem above it using lower-level services from the systems below it.
-+*Partitioning*: A technique that organizes the subsystem as peers that mutually provide different services to each other
++ *Design goals*: The qualities of the system that the developer should optimize. The are derived from the non-functional requirements.
++ *Software architecture*: The subsystem decomposition in terms of subsystem responsibilities, dependencies among subsystems, subsystem mapping to hardware, and major policy decisions such as control flow, access control, and data storage.
++ *Boundary use cases*: Description of the system configuration, startup, shutdown, and exception handling issues.
++ *Services*: A set of related operations that share a common purpose. The are used to manage the interaction between subsystems.
++ *Coupling*: It is used to measure the dependencies between subsystems. In ideals subsystem decomposition, it should be minimized.
++ *Cohesion*: It measures the dependencies among the classes within a subsystem. In ideal subsystem decomposition, it should be maximized 
++ *Layering*: A technique that allows the system to be organized as a hierarchy of subsystems, each providing higher level services to the subsystem above it using lower-level services from the systems below it.
++ *Partitioning*: A technique that organizes the subsystem as peers that mutually provide different services to each other
 ** Question 2 - Architectural Styles
-+*Repository*: In this architectural style, subsystems access and modify a single data structure. Subsystems are independent and interact only through this central component. Usually used for the database management systems.
-+*MVC*: In this architectural style, subsystem are classified into 3 different types: one that maintain the demain knowledge, another one related to the user interface and the last one manages the sequence of interactions with the user.
-+*Client-Server*: In this architectural style, one subsystem provides services to instances for the other subsystem which are responsible for interacting with the user.
-+*Peer-to-Peer*: Ageneralization of the client/server architectural style which subsystem can act both as a server and client in the sense that each subsystem can request and provide services.
-+*Pipe and filter*: A style in which subsystems process data received from a set of inputs and send results to other subsystems via a set of outputs. They are suitable for systems that apply transformations to streams of data without intervention by users.
++ *Repository*: In this architectural style, subsystems access and modify a single data structure. Subsystems are independent and interact only through this central component. Usually used for the database management systems.
++ *MVC*: In this architectural style, subsystem are classified into 3 different types: one that maintain the demain knowledge, another one related to the user interface and the last one manages the sequence of interactions with the user.
++ *Client-Server*: In this architectural style, one subsystem provides services to instances for the other subsystem which are responsible for interacting with the user.
++ *Peer-to-Peer*: Ageneralization of the client/server architectural style which subsystem can act both as a server and client in the sense that each subsystem can request and provide services.
++ *Pipe and filter*: A style in which subsystems process data received from a set of inputs and send results to other subsystems via a set of outputs. They are suitable for systems that apply transformations to streams of data without intervention by users.
 
