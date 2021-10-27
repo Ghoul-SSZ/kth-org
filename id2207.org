@@ -225,64 +225,64 @@ Neither of these models deals well with frequent changes:
 + Some requirements cannot be executedin thedevelopment environment because they require target-specific resources
 * DONE Quiz 1
 ** Question 1
-*Software Engineering*: The application of Engineering principle to deliver and maintain high quality & reliable software on time and within budget
-*System Models*: Abstract representations of the system that enable us to understand and visualize the system. They are useful for too large, too small, too complicated, or too expensive systems as they focus on the relevant details and ignore everything else.
-*Abstractions, decomposition and hierarchy*: Approaches to deal with software complexity
-*Complexity and change*: Major factors of the software design process. 
-*Problem solving in software engineering*: An activity that requires experimentation and reuse of pattern solutions in order to incrementally develop a system that matches the client's needs
++ *Software Engineering*: The application of Engineering principle to deliver and maintain high quality & reliable software on time and within budget
++ *System Models*: Abstract representations of the system that enable us to understand and visualize the system. They are useful for too large, too small, too complicated, or too expensive systems as they focus on the relevant details and ignore everything else.
++ *Abstractions, decomposition and hierarchy*: Approaches to deal with software complexity
++ *Complexity and change*: Major factors of the software design process. 
++ *Problem solving in software engineering*: An activity that requires experimentation and reuse of pattern solutions in order to incrementally develop a system that matches the client's needs
 ** Question 2
-*Risk based development*: A Software process that focus on the identification of high risk components to avoid suprises late in the project
-*Rational activity in software engineering*: Understanding the context in which design decisions are taken in a software development process.
-*Requirement Elicitation*: The activity in which the purpose and functionality of the system is defined. The results of this activity use case diagrams.
-*Requirement Analysis*: The activity in which the developer tries to produce a model of the system that os correct, complete, consistent and unambiguous.
-*System Design*: The activity in which the design goals and architecture of the project are defined, and the system is composed into smaller subsystems.
++ *Risk based development*: A Software process that focus on the identification of high risk components to avoid suprises late in the project
++ *Rational activity in software engineering*: Understanding the context in which design decisions are taken in a software development process.
++ *Requirement Elicitation*: The activity in which the purpose and functionality of the system is defined. The results of this activity use case diagrams.
++ *Requirement Analysis*: The activity in which the developer tries to produce a model of the system that os correct, complete, consistent and unambiguous.
++ *System Design*: The activity in which the design goals and architecture of the project are defined, and the system is composed into smaller subsystems.
 ** Question 3 - UML
-*Use case diagrams*: Diagrams used tp represent the functionality of the system during requirements elicitation and analysis activities. They show a behaviour of the system from the user's point of view.
-*Class diagrams*: Diagrams used to represent the structure of the system in terms of objects, classes, attributes, operations and their associations. They are used in three different activities: during requirements analysis to model problem domain concepts, during system design to model interfaces and subsystems, and during object design to model classes.
-*Interaction diagrams*: Diagrams used to represent the dynamic behaviour of the system and to visualizethe communication between the objects. Sequence and communication diagrams are special forms of this category.
-*Sequence diagrams*:  Diagrams used during requirements analysis to refine use case descriptions. They also help in identifyinf additional participating objects. They are also used during system design to refine subsystem interfaces.
-*State machine diagrams*: Diagrams used to describe the dynamic behaviour of an individual object as a number of states and transitions. Each state represents a set of values for an object. A transition represents the future state that the object can move to, with the conditions associatied with the change of the state.
-*Activity diagrams*: Diagrams that show control and data flows within a system. They describe the begavior of the system in terms of activities. They model elelments that represent the execution of a group of operations. An activity's execution can be triggered by the completion of other activities, by the availability of certain objects, or by external events.
++ *Use case diagrams*: Diagrams used tp represent the functionality of the system during requirements elicitation and analysis activities. They show a behaviour of the system from the user's point of view.
++ *Class diagrams*: Diagrams used to represent the structure of the system in terms of objects, classes, attributes, operations and their associations. They are used in three different activities: during requirements analysis to model problem domain concepts, during system design to model interfaces and subsystems, and during object design to model classes.
++ *Interaction diagrams*: Diagrams used to represent the dynamic behaviour of the system and to visualizethe communication between the objects. Sequence and communication diagrams are special forms of this category.
++ *Sequence diagrams*:  Diagrams used during requirements analysis to refine use case descriptions. They also help in identifyinf additional participating objects. They are also used during system design to refine subsystem interfaces.
++ *State machine diagrams*: Diagrams used to describe the dynamic behaviour of an individual object as a number of states and transitions. Each state represents a set of values for an object. A transition represents the future state that the object can move to, with the conditions associatied with the change of the state.
++ *Activity diagrams*: Diagrams that show control and data flows within a system. They describe the begavior of the system in terms of activities. They model elelments that represent the execution of a group of operations. An activity's execution can be triggered by the completion of other activities, by the availability of certain objects, or by external events.
 ** Question 4 - Relationship
-*An actor*: An entity that interacts with the sustem and represents a certain role or group of roles. It can be either a user, another system or a physical environment. It has a name and an optional description. 
-*Boundary*: It can be identified by distinguishing the tasks accomplished by the system and the tasks accomplished by its environment.
-*Extend Relationship*: A Relationship that represents an exceptional invoked case.
-*Include Relationship*: A Relationship that represents behaviour that is factored out of the use case to be reused by other use cases.
-*Aggregation Relationship*: A special case pf association Relationship denoting a consists of hierarchy. A special form of this Relationship is the composition Relationship where components cannot exists without the aggregate.
-*Qualifiers*: They can be used to redice the multiplicity of an association. 
++ *An actor*: An entity that interacts with the sustem and represents a certain role or group of roles. It can be either a user, another system or a physical environment. It has a name and an optional description. 
++ *Boundary*: It can be identified by distinguishing the tasks accomplished by the system and the tasks accomplished by its environment.
++ *Extend Relationship*: A Relationship that represents an exceptional invoked case.
++ *Include Relationship*: A Relationship that represents behaviour that is factored out of the use case to be reused by other use cases.
++ *Aggregation Relationship*: A special case pf association Relationship denoting a consists of hierarchy. A special form of this Relationship is the composition Relationship where components cannot exists without the aggregate.
++ *Qualifiers*: They can be used to redice the multiplicity of an association. 
 
 * DONE Quiz 2
 ** Question 2
-*Robustness*: The degree to which a system can function in a correct way, even with invalid inputs or stressful environment conditions.
-*Reliability*: The ability of a system to perform its required functions under stated conditions for a specified period of time. For Examples, the ability to detect specified faults or to withstand specidied security attacks.
-*Usability*: The ease with which the user can learn how to operate, prepare inputs for, and interpret outputs of a system.
-*Supportability*: Ease of changes to the system after deployment
-*Performance*: Quantifiable attributes of the system such as response time, througput, availability and accuracy.
++ *Robustness*: The degree to which a system can function in a correct way, even with invalid inputs or stressful environment conditions.
++ *Reliability*: The ability of a system to perform its required functions under stated conditions for a specified period of time. For Examples, the ability to detect specified faults or to withstand specidied security attacks.
++ *Usability*: The ease with which the user can learn how to operate, prepare inputs for, and interpret outputs of a system.
++ *Supportability*: Ease of changes to the system after deployment
++ *Performance*: Quantifiable attributes of the system such as response time, througput, availability and accuracy.
 ** Question 4
-*Consistency*: There are no contradictions between requirements
-*Unambiguity*: There is only one way to interpret certain requirement
-*Verifiability*: Repeatable test can be executed to demonstrate that the system fulfills the requirements Specification
-*Realism*: The system can be implemented within the defined constraints
++ *Consistency*: There are no contradictions between requirements
++ *Unambiguity*: There is only one way to interpret certain requirement
++ *Verifiability*: Repeatable test can be executed to demonstrate that the system fulfills the requirements Specification
++ *Realism*: The system can be implemented within the defined constraints
 ** Question 6
-*Prototyping*: It is widely used when projects are complex and/or innovative
-*BrainStorming*: An activity where people propose ideas and solutions to a probelm, putting aside all that can obstacle the consensus.
-*Joint Application Design*: A BrainStorming like technique where all stakeholders meet, discuss and come to mutually acceptable solution.
-*Rapid Application Development*: a technique suitable for fast software development, but usually limited to a small project.
-*Questionnaire*: Method for requirements elicitation that does not require the physical presense of the requirements analyst.
-*Observation*: A method used when the user cannot convey sufficient information when being interviewed. It should be carried out for a prolonged time.
++ *Prototyping*: It is widely used when projects are complex and/or innovative
++ *BrainStorming*: An activity where people propose ideas and solutions to a probelm, putting aside all that can obstacle the consensus.
++ *Joint Application Design*: A BrainStorming like technique where all stakeholders meet, discuss and come to mutually acceptable solution.
++ *Rapid Application Development*: a technique suitable for fast software development, but usually limited to a small project.
++ *Questionnaire*: Method for requirements elicitation that does not require the physical presense of the requirements analyst.
++ *Observation*: A method used when the user cannot convey sufficient information when being interviewed. It should be carried out for a prolonged time.
 
 * DONE Quiz 3 
 ** Question 1
-*Entity Object*: Objects that present persistent information tracked by the system. To identify them from use cases, we usually search for recurring nouns, data sources, real-world activities that we need to track
-*Boundary Object*: Objects that represent the system interface and the interactions between the system and the users. To identify them, we usually identify the forms that users use to interact with the system, along with other forms of interaction, such as notices or messages from the system.
-*Control Object*: Objects that describe the order in which interactions between the user and the system occur.
++ *Entity Object*: Objects that present persistent information tracked by the system. To identify them from use cases, we usually search for recurring nouns, data sources, real-world activities that we need to track
++ *Boundary Object*: Objects that represent the system interface and the interactions between the system and the users. To identify them, we usually identify the forms that users use to interact with the system, along with other forms of interaction, such as notices or messages from the system.
++ *Control Object*: Objects that describe the order in which interactions between the user and the system occur.
 ** Question 3
-*Falsification principle*: Demonstrating that relevant details of the system are not presented or presented incorrectly.
-*Syntactic Approach*: One of the class identification approaches in which a noun-verb analysis is used to identify components of the object model.
-*Organization Class*: In common class pattern approach, this type of classes represent any kind of purposeful grouping or collection of things
-*CRC*: An approach that involves brainstorming sessions, where the team members exchange cards on which possible classes are identified, with their responsibilities and collaborators
-*Fork Diagram*: A type of sequence diagrams in which the dynamic behavior is centralized in a single object (the control object) that knows all the other objects and uses them for direct commands
-*Stair Diagram*: A type of sequence diagram in which the dynamic behavior is distributed. Each object delegates some responsibility to other objects
++ *Falsification principle*: Demonstrating that relevant details of the system are not presented or presented incorrectly.
++ *Syntactic Approach*: One of the class identification approaches in which a noun-verb analysis is used to identify components of the object model.
++ *Organization Class*: In common class pattern approach, this type of classes represent any kind of purposeful grouping or collection of things
++ *CRC*: An approach that involves brainstorming sessions, where the team members exchange cards on which possible classes are identified, with their responsibilities and collaborators
++ *Fork Diagram*: A type of sequence diagrams in which the dynamic behavior is centralized in a single object (the control object) that knows all the other objects and uses them for direct commands
++ *Stair Diagram*: A type of sequence diagram in which the dynamic behavior is distributed. Each object delegates some responsibility to other objects
 
 * DONE Quiz 4
 ** Question 1 - System Design
